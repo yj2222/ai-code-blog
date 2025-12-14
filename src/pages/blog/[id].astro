@@ -1,0 +1,52 @@
+---
+// 1. microCMSクライアントをインポート
+import { client } from '@/lib/microcms';
+import Layout from '@/layouts/Layout.astro';
+import type { Blog } from '@/lib/blog';
+import { Container, Heading, Text, Badge, Flex } from '@radix-ui/themes';
+
+export async function getStaticPaths() {
+  const data = await client.get({ endpoint: 'blog' });
+  const blogs: Blog[] = data.contents;
+
+  return blogs.map((blog) => ({
+    params: { id: blog.id },
+    props: { blog },
+  }));
+}
+
+const { blog } = Astro.props;
+---
+
+<Layout title={blog.title}>
+  <main>
+    <Container size="4" p="4">
+      <article>
+        {blog.thumbnail?.url && (
+          <img
+            src={blog.thumbnail.url}
+            alt={blog.title}
+            style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', marginBottom: '1rem' }}
+          />
+        )}
+        {!blog.thumbnail?.url && (
+          <img
+            src="/image01.png"
+            alt={blog.title}
+            style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', marginBottom: '1rem' }}
+          />
+        )}
+        <Heading size="8" mb="4">{blog.title}</Heading>
+        <Flex gap="2" mb="4">
+          {blog.category.map((cat) => (
+            <Badge key={cat} variant="soft" color="green">{cat}</Badge>
+          ))}
+        </Flex>
+        <Text size="2" color="gray" mb="6">
+          公開日: {new Date(blog.publishedAt).toLocaleDateString()}
+        </Text>
+        <div set:html={blog.contents}></div>
+      </article>
+    </Container>
+  </main>
+</Layout>

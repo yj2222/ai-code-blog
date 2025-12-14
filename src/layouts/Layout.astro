@@ -1,0 +1,27 @@
+---
+import ThemeProvider from '@/components/ThemeProvider.tsx';
+import Header from '@/components/Header.tsx';
+import Footer from '@/components/Footer.tsx';
+import '@/assets/css/common.scss';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{Astro.props.title || 'Astro Basics'}</title>
+	</head>
+	<body>
+		<ThemeProvider client:load>
+			<Header client:load />
+			<slot />
+			<Footer client:load />
+		</ThemeProvider>
+	</body>
+</html>
+
+<style>
+</style>
