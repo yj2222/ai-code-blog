@@ -1,0 +1,47 @@
+---
+// 1. microCMSクライアントをインポート
+import { client } from '@/lib/microcms';
+import Layout from '@/layouts/Layout.astro';
+import type { Blog } from '@/lib/blog';
+import { Card, Grid, Heading, Text, Link, Container, Badge, Flex, Inset } from '@radix-ui/themes';
+
+// 2. サーバーサイドでAPIからブログ一覧を取得
+const data = await client.get({ endpoint: "blog" });
+
+console.log(data);
+
+const blogs: Blog[] = data.contents;
+---
+
+<Layout title="Astro + microCMS Blog">
+  <main>
+    <Container size="4" p="4">
+      <Heading size="8" mb="4">ブログ一覧</Heading>
+
+      <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="4">
+        {blogs.map((post) => (
+          <Card key={post.id} variant="classic" size="2" style={{ border: '1px solid var(--gray-6)' }}>
+            <Link href={`/blog/${post.id}`} style={{ textDecoration: 'none', display: 'block' }}>
+              <Flex direction="column" gap="2">
+                <img
+                  src={post.thumbnail?.url || '/image01.png'}
+                  alt={post.title}
+                  style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                />
+                <Flex direction="column" gap="2" p="3">
+                  <Heading size="4">{post.title}</Heading>
+                  <Flex gap="2" wrap="wrap">
+                    {post.category.map((cat) => (
+                      <Badge key={cat} variant="soft" color="blue">{cat}</Badge>
+                    ))}
+                  </Flex>
+                  <Text size="2" color="gray">{new Date(post.publishedAt).toLocaleDateString()}</Text>
+                </Flex>
+              </Flex>
+            </Link>
+          </Card>
+        ))}
+      </Grid>
+    </Container>
+  </main>
+</Layout>

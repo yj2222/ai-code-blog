@@ -1,47 +1,84 @@
 ---
-// 1. microCMSクライアントをインポート
-import { client } from '@/lib/microcms';
+// ポートフォリオサイトのトップページ
 import Layout from '@/layouts/Layout.astro';
-import type { Blog } from '@/lib/blog';
-import { Card, Grid, Heading, Text, Link, Container, Badge, Flex, Inset } from '@radix-ui/themes';
-
-// 2. サーバーサイドでAPIからブログ一覧を取得
-const data = await client.get({ endpoint: "blog" });
-
-console.log(data);
-
-const blogs: Blog[] = data.contents;
+import { Container, Heading, Text, Grid, Card, Flex, Button, Link, Badge } from '@radix-ui/themes';
 ---
 
-<Layout title="Astro + microCMS Blog">
+<Layout title="Web Director Portfolio">
   <main>
     <Container size="4" p="4">
-      <Heading size="8" mb="4">ブログ一覧</Heading>
+      <!-- ヒーローセクション -->
+      <section style={{ textAlign: 'center', padding: '4rem 0' }}>
+        <Heading size="9" mb="4">Web Director</Heading>
+        <Text size="5" color="gray" mb="6">
+          ユーザー体験を重視したウェブサイト制作とデジタル戦略を提案します
+        </Text>
+      </section>
 
-      <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="4">
-        {blogs.map((post) => (
-          <Card key={post.id} variant="classic" size="2" style={{ border: '1px solid var(--gray-6)' }}>
-            <Link href={`/blog/${post.id}`} style={{ textDecoration: 'none', display: 'block' }}>
-              <Flex direction="column" gap="2">
-                <img
-                  src={post.thumbnail?.url || '/image01.png'}
-                  alt={post.title}
-                  style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                />
-                <Flex direction="column" gap="2" p="3">
-                  <Heading size="4">{post.title}</Heading>
-                  <Flex gap="2" wrap="wrap">
-                    {post.category.map((cat) => (
-                      <Badge key={cat} variant="soft" color="blue">{cat}</Badge>
-                    ))}
-                  </Flex>
-                  <Text size="2" color="gray">{new Date(post.publishedAt).toLocaleDateString()}</Text>
+      <!-- Aboutセクション -->
+      <section id="about" style={{ marginBottom: '4rem' }}>
+        <Heading size="7" mb="4">About Me</Heading>
+        <Grid columns={{ initial: '1', md: '2' }} gap="6">
+          <div>
+            <Text size="4" mb="4">
+              10年以上のウェブ制作経験を持つウェブディレクターです。
+              クライアントのビジネス目標を理解し、効果的なデジタルソリューションを提供します。
+            </Text>
+            <Text size="4">
+              UI/UXデザイン、コンテンツ戦略、SEO、アクセス解析など、
+              ウェブサイトの成功に必要な全ての側面をカバーします。
+            </Text>
+          </div>
+          <Card>
+            <Flex direction="column" gap="3" p="4">
+              <Heading size="5">スキル</Heading>
+              <Flex gap="2" wrap="wrap">
+                <Badge>HTML/CSS</Badge>
+                <Badge>JavaScript</Badge>
+                <Badge>React</Badge>
+                <Badge>Astro</Badge>
+                <Badge>UI/UX Design</Badge>
+                <Badge>SEO</Badge>
+                <Badge>Google Analytics</Badge>
+                <Badge>Project Management</Badge>
+              </Flex>
+            </Flex>
+          </Card>
+        </Grid>
+      </section>
+
+      <!-- プロジェクトセクション -->
+      <section id="projects" style={{ marginBottom: '4rem' }}>
+        <Heading size="7" mb="4">Projects</Heading>
+        <Grid columns={{ initial: '1', md: '2', lg: '3' }} gap="4">
+          <Card asChild>
+            <Link href="https://kurashinotaguken.com/" target="_blank" style={{ textDecoration: 'none' }}>
+              <Flex direction="column" gap="3" p="4">
+                <Heading size="5">暮らしのたぐけん</Heading>
+                <Text size="3" color="gray">
+                  地域振興のための多額券サイト制作。直感的なUIで利用促進。
+                </Text>
+                <Flex gap="2">
+                  <Badge variant="soft">wordpress</Badge>
                 </Flex>
               </Flex>
             </Link>
           </Card>
-        ))}
-      </Grid>
+          <Card asChild>
+            <Link href="https://ethical-normal.com/" target="_blank" style={{ textDecoration: 'none' }}>
+              <Flex direction="column" gap="3" p="4">
+                <Heading size="5">Ethical Normal</Heading>
+                <Text size="3" color="gray">
+                  倫理的で持続可能なライフスタイルを提案するブランドサイト。
+                </Text>
+                <Flex gap="2">
+                	<Badge variant="soft">wordpress</Badge>
+                </Flex>
+              </Flex>
+            </Link>
+          </Card>
+        </Grid>
+      </section>
     </Container>
   </main>
 </Layout>
